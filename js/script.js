@@ -7,6 +7,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const card = document.querySelector('.card');
     let filmDB;
     let counter = 0;
+    const shownFilm = [];
     
 
 // отправка запроса на получение фильма
@@ -30,7 +31,6 @@ window.addEventListener('DOMContentLoaded', () => {
     wrapper.addEventListener('click', (event) => {
         if (event.target && event.target.tagName == 'BUTTON' ) {
             showNextFilm ();
-            console.log("Туц");
         }
     });
 
@@ -39,30 +39,36 @@ window.addEventListener('DOMContentLoaded', () => {
       
     }
 
-    //показать следующий фильи
+    //show next film
     function showNextFilm () {
-        const i = random ();
-        image.src = filmDB[counter].img;
-        card.classList.add('fade');
-        button[i].innerText = filmDB[counter].title;
-        counter++;
+        
+        const i = getRandomInt (0,4);
+        counter = getRandomInt (0,filmDB.length);
+        
+        while (shownFilm.some(item=>item === counter)) {
+            counter = getRandomInt (0,filmDB.length);
+        } 
+        shownFilm.push(counter);
+        try {
+            image.src = filmDB[counter].img;
+            card.classList.add('fade');
+            button[i].innerText = filmDB[counter].title;
+            console.log(shownFilm);
+        }catch (error) {
+            console.log(filmDB[counter], error);
+        }
+        
 
     }
+        
 
-
- //рандом от 1 до 4 
- function random () {
-    const myArray = [0, 1, 2, 3];
-    const result =  Math.floor(Math.random()*myArray.length);
-    return myArray[result];
- }
-
+ //Random iteger from min to max (mot include max)
  function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
  }
-
+ 
 
 
 });
